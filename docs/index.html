@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bot Status</title>
+    <meta http-equiv="refresh" content="30">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #4CAF50;
+        }
+        .dot {
+            height: 20px;
+            width: 20px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 10px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Telegram Bot</h1>
+        <div class="status">
+            Bot Aktif <span class="dot"></span>
+        </div>
+        <p>Son güncelleme: <span id="time"></span></p>
+    </div>
+    <script>
+        function updateTime() {
+            document.getElementById('time').textContent = new Date().toLocaleString();
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Ping bot
+        setInterval(() => {
+            fetch('https://telegram-bot.mehmetkara72bot.repl.co')
+            .catch(console.error);
+        }, 5000);
+    </script>
+</body>
+</html> 
