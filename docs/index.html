@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bot Status</title>
+    <title>Telegram Bot</title>
+    <meta charset="UTF-8">
     <meta http-equiv="refresh" content="30">
     <style>
         body {
@@ -23,16 +24,26 @@
         .status {
             font-size: 24px;
             margin: 20px 0;
+        }
+        .status.active {
             color: #4CAF50;
+        }
+        .status.inactive {
+            color: #f44336;
         }
         .dot {
             height: 20px;
             width: 20px;
-            background-color: #4CAF50;
             border-radius: 50%;
             display: inline-block;
             margin-left: 10px;
+        }
+        .dot.active {
+            background-color: #4CAF50;
             animation: blink 1s infinite;
+        }
+        .dot.inactive {
+            background-color: #f44336;
         }
         @keyframes blink {
             50% { opacity: 0.5; }
@@ -42,22 +53,52 @@
 <body>
     <div class="container">
         <h1>Telegram Bot</h1>
-        <div class="status">
-            Bot Aktif <span class="dot"></span>
+        <div id="statusContainer" class="status active">
+            Bot Aktif <span class="dot active"></span>
         </div>
         <p>Son güncelleme: <span id="time"></span></p>
     </div>
     <script>
+        const REPLIT_URL = 'https://Telegram-bot.mehmetkara72bot.repl.co';
+        
         function updateTime() {
             document.getElementById('time').textContent = new Date().toLocaleString();
         }
-        updateTime();
-        setInterval(updateTime, 1000);
+        
+        function updateStatus(isActive) {
+            const container = document.getElementById('statusContainer');
+            const dot = container.querySelector('.dot');
+            
+            if (isActive) {
+                container.className = 'status active';
+                container.innerHTML = 'Bot Aktif <span class="dot active"></span>';
+            } else {
+                container.className = 'status inactive';
+                container.innerHTML = 'Bot Pasif <span class="dot inactive"></span>';
+            }
+        }
+        
+        async function checkBotStatus() {
+            try {
+                const response = await fetch(REPLIT_URL);
+                updateStatus(response.ok);
+            } catch (error) {
+                updateStatus(false);
+                console.error('Bot kontrol hatası:', error);
+            }
+        }
 
-        // Ping bot
+        // İlk yüklemede çalıştır
+        updateTime();
+        checkBotStatus();
+
+        // Her 30 saniyede bir güncelle
+        setInterval(updateTime, 1000);
+        setInterval(checkBotStatus, 5000);
+
+        // Botu uyanık tut
         setInterval(() => {
-            fetch('https://telegram-bot.mehmetkara72bot.repl.co')
-            .catch(console.error);
+            fetch(REPLIT_URL).catch(console.error);
         }, 5000);
     </script>
 </body>
