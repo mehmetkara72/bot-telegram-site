@@ -59,7 +59,8 @@
         <p>Son güncelleme: <span id="time"></span></p>
     </div>
     <script>
-        const REPLIT_URL = 'https://Telegram-bot.mehmetkara72bot.repl.co';
+        const REPLIT_URL = 'https://telegram-bot.mehmetkara72bot.repl.co';
+        let isFirstCheck = true;
         
         function updateTime() {
             document.getElementById('time').textContent = new Date().toLocaleString();
@@ -67,7 +68,6 @@
         
         function updateStatus(isActive) {
             const container = document.getElementById('statusContainer');
-            const dot = container.querySelector('.dot');
             
             if (isActive) {
                 container.className = 'status active';
@@ -75,7 +75,19 @@
             } else {
                 container.className = 'status inactive';
                 container.innerHTML = 'Bot Pasif <span class="dot inactive"></span>';
+                
+                // İlk kontrolde bot pasifse, Replit'i uyandırmaya çalış
+                if (isFirstCheck) {
+                    console.log('Bot uyandırılıyor...');
+                    fetch(REPLIT_URL, { method: 'GET' })
+                        .then(() => {
+                            console.log('Uyandırma sinyali gönderildi');
+                            setTimeout(checkBotStatus, 10000); // 10 saniye sonra tekrar kontrol et
+                        })
+                        .catch(console.error);
+                }
             }
+            isFirstCheck = false;
         }
         
         async function checkBotStatus() {
