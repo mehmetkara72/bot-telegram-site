@@ -1,0 +1,25 @@
+name: Run Telegram Bot
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Her 5 dakikada bir çalıştır
+  workflow_dispatch:  # Manuel tetikleme için
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run bot
+        run: node index.js
+        env:
+          BOT_TOKEN: "7572428051:AAHLtNWVp41UGld8c01GNW9ifgodUnA9IFk" 
